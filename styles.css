@@ -1,0 +1,108 @@
+/* Fix for tall desktop displays */
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+header {
+  padding: 1rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+main {
+  flex: 0 0 auto; /* Don't grow, don't shrink, auto basis */
+}
+
+.service-section {
+  width: 100%;
+  height: 100%;
+}
+
+.repairs-section, .maintenance-section, .recycling-section {
+  width: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.repairs-section {
+  background-color: #e0e8f0;
+}
+
+.maintenance-section {
+  background-color: #d0e0e8;
+}
+
+.recycling-section {
+  background-color: #c0d8e0;
+}
+
+.section-content {
+  flex: 1;
+  max-width: 50%;
+  padding-right: 2rem;
+}
+
+.section-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-image img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+footer {
+  flex: 1 0 auto; /* Grow to fill remaining space, don't shrink, auto basis */
+  background-color: #1a2a3a;
+  color: #fff;
+  padding: 2rem 2rem 0 2rem; /* Remove bottom padding as it will expand */
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.footer-info, .business-hours, .footer-cta {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 1rem;
+}
+
+.copyright {
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  margin-top: auto; /* Push to bottom of footer */
+  padding-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .repairs-section, .maintenance-section, .recycling-section {
+    flex-direction: column;
+    padding: 3rem 1.5rem;
+  }
+  
+  .section-content {
+    max-width: 100%;
+    padding-right: 0;
+    margin-bottom: 2rem;
+  }
+} 
