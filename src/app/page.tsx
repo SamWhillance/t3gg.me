@@ -151,7 +151,7 @@ export default function Home() {
                         onChange={(e) => setSelectedTheo(e.target.value)}
                         className="mr-2"
                       />
-                      <span className="text-gray-300">Ethereal</span>
+                      <span className="text-gray-300">Ygritte</span>
                     </div>
                   </label>
 
