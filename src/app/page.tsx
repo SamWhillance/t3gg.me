@@ -126,7 +126,7 @@ export default function Home() {
                 <p className="text-sm font-medium text-gray-300">
                   Step 1: Choose a Theo
                 </p>
-                <div className="flex space-x-4 justify-center">
+                <div className="flex flex-wrap justify-center gap-4">
                   <label
                     className={`cursor-pointer flex flex-col items-center ${
                       selectedTheo === "theo4.jpg"
