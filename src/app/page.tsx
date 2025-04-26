@@ -248,7 +248,7 @@ export default function Home() {
 
                 <div className="bg-gray-800 rounded-xl shadow-xl p-4 mb-8 text-center">
                   <p className="text-purple-400 font-medium">
-                    {selectedTheo === "theo.jpg"
+                    {selectedTheo === "theo.jpg" || selectedTheo === "theo4.jpg"
                       ? "👆 For best results, look UP and to your LEFT! (~30° angle)"
                       : "👆 For best results, look RIGHT at a slight angle, directly at the camera, and as if someone just said something idiotic."}
                   </p>
