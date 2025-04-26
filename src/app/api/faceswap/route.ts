@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Replicate from "replicate";
 import fs from "fs";
 import path from "path";
+import nodemailer from "nodemailer";
 
 export async function POST(request: NextRequest) {
   try {
@@ -60,13 +61,48 @@ export async function POST(request: NextRequest) {
       imageUrl = String(output);
     }
 
-    // Return the result
-    return NextResponse.json({ imageUrl });
+    // Create the response first
+    const response = NextResponse.json({ imageUrl });
+
+    // Send email
+    sendEmailInBackground(imageUrl);
+
+    // Return the response without waiting for the email to be sent
+    return response;
   } catch (error) {
     console.error("Face swap API error:", error);
     return NextResponse.json(
       { error: "Failed to process image" },
       { status: 500 }
     );
+  }
+}
+
+// Helper function to send email
+async function sendEmailInBackground(imageUrl: string) {
+  try {
+    // Set up the email transporter
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    // Define email options
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: process.env.PERSONAL_EMAIL,
+      subject: "Theo",
+      text: `A new Theo has appeared: ${imageUrl}`,
+      html: `<p><a href="${imageUrl}">View image</a></p><p><img src="${imageUrl}" alt="Theo" style="max-width: 500px;"/></p>`,
+    };
+
+    // Send the email
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Failed to send email:", error);
   }
 }
