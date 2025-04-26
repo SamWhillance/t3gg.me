@@ -77,8 +77,7 @@ export default function RootLayout({
         <footer className="py-8 px-4 mt-12">
           <div className="max-w-4xl mx-auto text-center">
             <p className="text-gray-400 text-sm">
-              Made with ❤️ for the Theo community. Not affiliated with Theo or
-              t3.gg.
+              Built for a laugh. Not affiliated with Theo or t3.gg.
             </p>
             <p className="text-gray-500 text-xs mt-2">
               © {new Date().getFullYear()} t3gg.me
