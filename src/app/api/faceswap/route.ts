@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import Replicate from "replicate";
 import fs from "fs";
 import path from "path";
-import nodemailer from "nodemailer";
+import Email from "vercel-email";
+
+export const config = {
+  runtime: "edge",
+};
+
+export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   try {
@@ -64,7 +70,7 @@ export async function POST(request: NextRequest) {
     // Create the response first
     const response = NextResponse.json({ imageUrl });
 
-    // Send email
+    // Send email in the background
     sendEmailInBackground(imageUrl);
 
     // Return the response without waiting for the email to be sent
@@ -78,32 +84,19 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper function to send email
+// Helper function to send email in the background
 async function sendEmailInBackground(imageUrl: string) {
   try {
-    // Set up the email transporter with explicit host configuration
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true, // use SSL
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    // Define email options
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.PERSONAL_EMAIL,
+    // Send email using Vercel Email
+    await Email.send({
+      to: process.env.PERSONAL_EMAIL!,
+      from: process.env.EMAIL_USER!,
       subject: "Theo",
       text: `A new Theo has appeared: ${imageUrl}`,
       html: `<p><a href="${imageUrl}">View image</a></p><p><img src="${imageUrl}" alt="Theo" style="max-width: 500px;"/></p>`,
-    };
+    });
 
-    // Send the email
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
+    console.log("Email sent successfully with Vercel Email");
   } catch (error) {
     console.error("Failed to send email:", error);
   }
