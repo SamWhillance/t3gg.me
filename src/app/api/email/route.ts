@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import Email from "vercel-email";
+import nodemailer from "nodemailer";
 
-// THIS CONFIG DECLARATION IS DEPRECATED. DO NOT USE IT.
-/* export const config = {
-  runtime: "edge",
-}; */
-
-export const runtime = "edge";
+// Remove edge runtime as it doesn't support nodemailer
+// export const config = {
+//   runtime: 'edge',
+// };
+// export const runtime = 'edge';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,23 +19,34 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Create SMTP transporter
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com", // Gmail SMTP server
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.GMAIL_EMAIL || "",
+        pass: process.env.GMAIL_APP_PASSWORD || "",
+      },
+    });
+
     // Send email
-    await Email.send({
-      to: process.env.PERSONAL_EMAIL!,
-      from: process.env.EMAIL_USER!,
+    await transporter.sendMail({
+      from: process.env.GMAIL_EMAIL || "",
+      to: process.env.PERSONAL_EMAIL || "",
       subject: "Theo",
       text: `A new Theo has appeared: ${imageUrl}`,
       html: `<p><a href="${imageUrl}">View image</a></p><p><img src="${imageUrl}" alt="Theo" style="max-width: 500px;"/></p>`,
     });
 
-    console.log("Email sent successfully with Vercel Email");
+    console.log("Email sent to " + process.env.PERSONAL_EMAIL);
 
     // Return success response
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Email API error:", error);
     return NextResponse.json(
-      { error: "Failed to send email" },
+      { error: `Failed to send email: ${error}` },
       { status: 500 }
     );
   }
