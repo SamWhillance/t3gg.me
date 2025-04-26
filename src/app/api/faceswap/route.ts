@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
     // Parse the form data
     const formData = await request.formData();
     const image = formData.get("image") as File | null;
+    const theoImage = (formData.get("theoImage") as string) || "theo2.jpg";
 
     if (!image) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
     const base64Image = `data:${image.type};base64,${base64}`;
 
     // Read and convert the target image to base64
-    const theoImagePath = path.join(process.cwd(), "public", "theo.jpg");
+    const theoImagePath = path.join(process.cwd(), "public", theoImage);
     const theoImageBuffer = fs.readFileSync(theoImagePath);
     const theoBase64 = Buffer.from(theoImageBuffer).toString("base64");
     const theoBase64Image = `data:image/jpeg;base64,${theoBase64}`;

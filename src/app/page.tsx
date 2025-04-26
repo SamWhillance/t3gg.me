@@ -9,6 +9,7 @@ export default function Home() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedTheo, setSelectedTheo] = useState<string>("theo2.jpg");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,6 +44,7 @@ export default function Home() {
     try {
       const formData = new FormData();
       formData.append("image", selectedFile);
+      formData.append("theoImage", selectedTheo);
 
       const response = await fetch("/api/faceswap", {
         method: "POST",
@@ -122,12 +124,77 @@ export default function Home() {
             <div className="grid grid-cols-1 gap-6">
               <div className="space-y-4">
                 <p className="text-sm font-medium text-gray-300">
-                  Step 1: Upload your selfie
+                  Step 1: Choose a Theo
+                </p>
+                <div className="flex space-x-4 justify-center">
+                  <label
+                    className={`cursor-pointer flex flex-col items-center ${
+                      selectedTheo === "theo.jpg"
+                        ? "ring-2 ring-purple-500 rounded-lg"
+                        : ""
+                    }`}
+                  >
+                    <div className="relative w-24 h-24 mb-2 overflow-hidden rounded-lg">
+                      <Image
+                        src="/theo.jpg"
+                        alt="Theo 1"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="theoImage"
+                        value="theo.jpg"
+                        checked={selectedTheo === "theo.jpg"}
+                        onChange={(e) => setSelectedTheo(e.target.value)}
+                        className="mr-2"
+                      />
+                      <span className="text-gray-300">Legacy</span>
+                    </div>
+                  </label>
+
+                  <label
+                    className={`cursor-pointer flex flex-col items-center ${
+                      selectedTheo === "theo2.jpg"
+                        ? "ring-2 ring-purple-500 rounded-lg"
+                        : ""
+                    }`}
+                  >
+                    <div className="relative w-24 h-24 mb-2 overflow-hidden rounded-lg">
+                      <Image
+                        src="/theo2.jpg"
+                        alt="Theo 2"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="theoImage"
+                        value="theo2.jpg"
+                        checked={selectedTheo === "theo2.jpg"}
+                        onChange={(e) => setSelectedTheo(e.target.value)}
+                        className="mr-2"
+                      />
+                      <span className="text-gray-300">NextGen</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <p className="text-sm font-medium text-gray-300">
+                  Step 2: Upload your selfie
                 </p>
 
                 <div className="bg-gray-800 rounded-xl shadow-xl p-4 mb-8 text-center">
                   <p className="text-purple-400 font-medium">
-                    👆 For best results, look UP and to your LEFT! (~30° angle)
+                    {selectedTheo === "theo.jpg"
+                      ? "👆 For best results, look UP and to your LEFT! (~30° angle)"
+                      : "👆 For best results, look RIGHT at a slight angle, directly at the camera, and as if someone just said something idiotic."}
                   </p>
                 </div>
                 <div
@@ -163,7 +230,7 @@ export default function Home() {
 
               <div className="space-y-4">
                 <p className="text-sm font-medium text-gray-300">
-                  Step 2: Generate your Theo image
+                  Step 3: Generate your Theo image
                 </p>
                 <button
                   type="submit"
@@ -206,7 +273,7 @@ export default function Home() {
 
               <div className="space-y-4">
                 <p className="text-sm font-medium text-gray-300">
-                  Step 3: Download & upload as profile picture
+                  Step 4: Download to use as profile picture
                 </p>
                 <div className="border-2 border-gray-600 rounded-lg p-4 h-64 flex items-center justify-center bg-gray-800">
                   {resultImage ? (
