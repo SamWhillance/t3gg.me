@@ -4,10 +4,6 @@ import fs from "fs";
 import path from "path";
 import Email from "vercel-email";
 
-export const config = {
-  runtime: "edge",
-};
-
 export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
