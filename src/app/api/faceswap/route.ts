@@ -2,9 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import Replicate from "replicate";
 import fs from "fs";
 import path from "path";
-import Email from "vercel-email";
-
-export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   try {
@@ -63,13 +60,13 @@ export async function POST(request: NextRequest) {
       imageUrl = String(output);
     }
 
-    // Create the response first
+    // Create the response
     const response = NextResponse.json({ imageUrl });
 
-    // Send email in the background
-    sendEmailInBackground(imageUrl);
+    // Send the email in the background without waiting for the response
+    triggerEmailNotification(imageUrl);
 
-    // Return the response without waiting for the email to be sent
+    // Return the response
     return response;
   } catch (error) {
     console.error("Face swap API error:", error);
@@ -80,20 +77,20 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper function to send email in the background
-async function sendEmailInBackground(imageUrl: string) {
+// Helper function to trigger the email notification in the background
+async function triggerEmailNotification(imageUrl: string) {
   try {
-    // Send email using Vercel Email
-    await Email.send({
-      to: process.env.PERSONAL_EMAIL!,
-      from: process.env.EMAIL_USER!,
-      subject: "Theo",
-      text: `A new Theo has appeared: ${imageUrl}`,
-      html: `<p><a href="${imageUrl}">View image</a></p><p><img src="${imageUrl}" alt="Theo" style="max-width: 500px;"/></p>`,
+    // Call the email endpoint
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/email`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ imageUrl }),
+    }).catch((error) => {
+      console.error("Failed to trigger email notification:", error);
     });
-
-    console.log("Email sent successfully with Vercel Email");
   } catch (error) {
-    console.error("Failed to send email:", error);
+    console.error("Failed to trigger email notification:", error);
   }
 }
