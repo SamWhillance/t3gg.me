@@ -129,6 +129,34 @@ export default function Home() {
                 <div className="flex space-x-4 justify-center">
                   <label
                     className={`cursor-pointer flex flex-col items-center ${
+                      selectedTheo === "theo4.jpg"
+                        ? "ring-2 ring-purple-500 rounded-lg"
+                        : ""
+                    }`}
+                  >
+                    <div className="relative w-24 h-24 mb-2 overflow-hidden rounded-lg">
+                      <Image
+                        src="/theo4.jpg"
+                        alt="Theo 4"
+                        fill
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="radio"
+                        name="theoImage"
+                        value="theo4.jpg"
+                        checked={selectedTheo === "theo4.jpg"}
+                        onChange={(e) => setSelectedTheo(e.target.value)}
+                        className="mr-2"
+                      />
+                      <span className="text-gray-300">Ethereal</span>
+                    </div>
+                  </label>
+
+                  <label
+                    className={`cursor-pointer flex flex-col items-center ${
                       selectedTheo === "theo.jpg"
                         ? "ring-2 ring-purple-500 rounded-lg"
                         : ""
@@ -151,7 +179,7 @@ export default function Home() {
                         onChange={(e) => setSelectedTheo(e.target.value)}
                         className="mr-2"
                       />
-                      <span className="text-gray-300">Legacy</span>
+                      <span className="text-gray-300">Retrograde</span>
                     </div>
                   </label>
 
